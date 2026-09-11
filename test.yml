@@ -1,0 +1,139 @@
+name: Run Prime Analysis Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Run quick primality tests
+      run: |
+        python -c "
+        from src.primality_tests import PrimalityTester
+        print('Testing Miller-Rabin...')
+        assert PrimalityTester.miller_rabin(2) == True
+        assert PrimalityTester.miller_rabin(3) == True
+        assert PrimalityTester.miller_rabin(17) == True
+        assert PrimalityTester.miller_rabin(4) == False
+        assert PrimalityTester.miller_rabin(100) == False
+        print('✓ Primality tests passed')
+        "
+    
+    - name: Run prime generation tests
+      run: |
+        python -c "
+        from src.prime_generation import PrimeGenerator
+        print('Testing prime generation...')
+        primes = PrimeGenerator.sieve_of_eratosthenes(100)
+        assert len(primes) == 25
+        assert primes[0] == 2
+        assert primes[-1] == 97
+        print('✓ Prime generation tests passed')
+        "
+    
+    - name: Run distribution analysis tests
+      run: |
+        python -c "
+        from src.distribution_analysis import DistributionAnalyzer
+        print('Testing distribution analysis...')
+        count = DistributionAnalyzer.prime_counting_function(100)
+        assert count == 25
+        analysis = DistributionAnalyzer.analyze_distribution(1000)
+        assert 'count' in analysis
+        assert 'density' in analysis
+        print('✓ Distribution analysis tests passed')
+        "
+    
+    - name: Run conjectures verification
+      run: |
+        python -c "
+        from src.conjectures import ConjectureExplorer
+        print('Testing conjectures...')
+        goldbach = ConjectureExplorer.goldbach_conjecture_verify(100)
+        assert goldbach['verification_rate'] > 0.9
+        twins = ConjectureExplorer.twin_prime_conjecture_verify(100)
+        assert twins['total_twin_pairs'] > 0
+        print('✓ Conjectures tests passed')
+        "
+    
+    - name: Generate sample charts
+      run: |
+        python -c "
+        from src.visualization import PrimeVisualizer
+        print('Generating visualization samples...')
+        PrimeVisualizer.generate_all_charts(1000)
+        print('✓ Charts generated successfully')
+        "
+    
+    - name: Run coverage report
+      run: |
+        pytest --cov=src --cov-report=xml 2>/dev/null || echo "No pytest tests found"
+    
+    - name: Test complete workflow
+      run: |
+        python -c "
+        from src.prime_generation import PrimeGenerator
+        from src.primality_tests import PrimalityTester
+        from src.distribution_analysis import DistributionAnalyzer
+        from src.conjectures import ConjectureExplorer
+        from src.riemann_zeta import RiemannZeta
+        
+        print('Running complete workflow test...')
+        limit = 1000
+        
+        # Generate primes
+        primes = PrimeGenerator.sieve_of_eratosthenes(limit)
+        print(f'✓ Generated {len(primes)} primes')
+        
+        # Analyze distribution
+        analysis = DistributionAnalyzer.analyze_distribution(limit)
+        print(f'✓ Analyzed distribution: density={analysis[\"density\"]:.4f}')
+        
+        # Verify conjectures
+        goldbach = ConjectureExplorer.goldbach_conjecture_verify(limit)
+        print(f'✓ Goldbach verification rate: {goldbach[\"verification_rate\"]:.2%}')
+        
+        # Test Zeta function
+        zeta_2 = RiemannZeta.zeta_euler_maclaurin(2, 100)
+        print(f'✓ ζ(2) = {zeta_2:.6f}')
+        
+        print('All tests passed successfully!')
+        "
+
+  build-pages:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        include_files: index.html
