@@ -4,14 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Millennium Prime Numbers - Exploración de la Conjetura de Riemann</title>
-    <meta name="description" content="Exploración computacional de números primos y la Conjetura de Riemann. Algoritmos de primalidad, generación de primos, análisis de distribución y función zeta.">
+    <meta name="description" content="Exploración computacional de números primos y la Conjetura de Riemann. Prueba interactiva en el navegador.">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -19,203 +14,195 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-        
         header {
             background: rgba(0, 0, 0, 0.85);
             color: white;
-            padding: 2.5rem 1.5rem;
+            padding: 2.2rem 1.5rem;
             text-align: center;
             border-bottom: 3px solid #4CAF50;
         }
-        
-        header h1 {
-            font-size: 2.4rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        header p {
-            font-size: 1.15rem;
-            opacity: 0.9;
-        }
-        
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-        
+        header h1 { font-size: 2.3rem; margin-bottom: 0.4rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        header p { font-size: 1.1rem; opacity: 0.9; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 1.4rem; }
         .section {
             background: white;
-            margin: 1.8rem 0;
-            padding: 2rem;
+            margin: 1.6rem 0;
+            padding: 1.8rem;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
-        
         .section h2 {
             color: #1e3c72;
             margin-bottom: 1rem;
             border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-            font-size: 1.5rem;
+            padding-bottom: 0.45rem;
+            font-size: 1.45rem;
         }
-        
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.3rem;
-            margin-top: 1.2rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
         }
-        
         .card {
             background: #f7f9fc;
-            padding: 1.4rem;
+            padding: 1.3rem;
             border-radius: 8px;
             border-left: 4px solid #4CAF50;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.2s ease;
         }
-        
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-        }
-        
-        .card h3 {
-            color: #1e3c72;
-            margin-bottom: 0.4rem;
-            font-size: 1.05rem;
-        }
-        
-        .card p {
-            font-size: 0.93rem;
-            color: #555;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 0.9rem;
-            flex-wrap: wrap;
-            margin-top: 1.4rem;
-        }
-        
+        .card:hover { transform: translateY(-3px); }
+        .card h3 { color: #1e3c72; margin-bottom: 0.35rem; font-size: 1.02rem; }
+        .card p { font-size: 0.92rem; color: #555; }
+        .button-group { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.2rem; }
         .btn, .github-link {
             display: inline-block;
-            padding: 0.75rem 1.4rem;
+            padding: 0.7rem 1.3rem;
             background: #4CAF50;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            transition: background 0.25s ease;
+            border: none;
+            cursor: pointer;
             font-size: 0.95rem;
+            transition: background 0.2s;
         }
-        
-        .btn:hover, .github-link:hover {
-            background: #3d8b40;
-        }
-        
-        .github-link {
-            background: #333;
-        }
-        
-        .github-link:hover {
-            background: #555;
-        }
-        
+        .btn:hover, .github-link:hover { background: #3d8b40; }
+        .github-link { background: #333; }
+        .github-link:hover { background: #555; }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1.2rem;
-            margin-top: 1.4rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.2rem;
         }
-        
         .stat-box {
             background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
             color: white;
-            padding: 1.4rem 1rem;
+            padding: 1.2rem 0.8rem;
             border-radius: 8px;
             text-align: center;
         }
-        
-        .stat-box .number {
-            font-size: 1.9rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-        
-        .stat-box .label {
-            font-size: 0.88rem;
-            opacity: 0.95;
-        }
-        
+        .stat-box .number { font-size: 1.8rem; font-weight: 700; }
+        .stat-box .label { font-size: 0.85rem; opacity: 0.95; }
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.3rem;
-            margin-top: 1.3rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.1rem;
         }
-        
         .feature {
-            padding: 1.4rem;
+            padding: 1.3rem;
             background: #fafbfc;
             border-radius: 8px;
             border: 1px solid #e8ecef;
         }
-        
-        .feature h3 {
-            color: #2e7d32;
-            margin-bottom: 0.6rem;
-        }
-        
-        .feature ul {
-            margin-left: 1.3rem;
-            color: #555;
-        }
-        
-        .feature li {
-            margin-bottom: 0.4rem;
-            font-size: 0.94rem;
-        }
-        
+        .feature h3 { color: #2e7d32; margin-bottom: 0.5rem; }
+        .feature ul { margin-left: 1.2rem; color: #555; }
+        .feature li { margin-bottom: 0.35rem; font-size: 0.93rem; }
         .code-block {
             background: #1e2a38;
             color: #e8eef4;
-            padding: 1rem 1.2rem;
+            padding: 0.9rem 1.1rem;
             border-radius: 6px;
             overflow-x: auto;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.88rem;
-            margin: 0.8rem 0 1.2rem;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.86rem;
+            margin: 0.7rem 0 1.1rem;
             line-height: 1.45;
         }
-        
         footer {
             background: rgba(0, 0, 0, 0.88);
             color: white;
             text-align: center;
-            padding: 2.2rem 1.5rem;
-            margin-top: 2rem;
+            padding: 2rem 1.5rem;
+            margin-top: 1.5rem;
             border-top: 3px solid #4CAF50;
         }
-        
-        footer a {
-            color: #81c784;
-        }
-        
+        footer a { color: #81c784; }
         .badge {
             display: inline-block;
             background: #e8f5e9;
             color: #2e7d32;
-            padding: 0.25rem 0.6rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            margin-left: 0.4rem;
+            margin-left: 0.35rem;
         }
-        
+
+        /* Demo interactivo */
+        .demo-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.6rem;
+        }
+        .demo-tab {
+            padding: 0.55rem 1rem;
+            background: #eef2f7;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 0.92rem;
+            color: #333;
+            transition: background 0.2s;
+        }
+        .demo-tab.active {
+            background: #1e3c72;
+            color: white;
+        }
+        .demo-panel { display: none; }
+        .demo-panel.active { display: block; }
+        .demo-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            align-items: center;
+            margin-bottom: 0.9rem;
+        }
+        .demo-row label { font-weight: 600; color: #1e3c72; min-width: 90px; }
+        .demo-row input {
+            padding: 0.55rem 0.7rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.95rem;
+            width: 140px;
+        }
+        .demo-result {
+            background: #f0f7f0;
+            border-left: 4px solid #4CAF50;
+            padding: 0.9rem 1.1rem;
+            border-radius: 6px;
+            margin-top: 0.8rem;
+            font-family: Consolas, monospace;
+            font-size: 0.92rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 2.5rem;
+        }
+        .demo-result.error { background: #fdf0f0; border-left-color: #e53935; }
+        .demo-note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.6rem;
+        }
+        .prime-list {
+            max-height: 180px;
+            overflow-y: auto;
+            background: #fafafa;
+            padding: 0.6rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-size: 0.88rem;
+        }
+
         @media (max-width: 600px) {
-            header h1 { font-size: 1.7rem; }
-            .section { padding: 1.4rem; }
+            header h1 { font-size: 1.65rem; }
+            .section { padding: 1.3rem; }
+            .demo-row input { width: 110px; }
         }
     </style>
 </head>
@@ -224,49 +211,101 @@
         <h1>🔢 Millennium Prime Numbers</h1>
         <p>Exploración Computacional de la Conjetura de Riemann</p>
     </header>
-    
+
     <div class="container">
+
+        <!-- DEMO INTERACTIVO -->
+        <section class="section" id="demo">
+            <h2>🧪 Probar en el navegador</h2>
+            <p style="margin-bottom: 1rem; color: #555;">
+                Prueba rápida de los algoritmos principales (implementación JavaScript en el cliente).
+                Para cálculos intensivos usa el código Python del repositorio.
+            </p>
+
+            <div class="demo-tabs">
+                <button class="demo-tab active" data-tab="primality">Primalidad</button>
+                <button class="demo-tab" data-tab="sieve">Generar primos</button>
+                <button class="demo-tab" data-tab="goldbach">Goldbach</button>
+                <button class="demo-tab" data-tab="twins">Primos gemelos</button>
+                <button class="demo-tab" data-tab="zeta">ζ(s) aproximado</button>
+            </div>
+
+            <!-- Primalidad -->
+            <div class="demo-panel active" id="panel-primality">
+                <div class="demo-row">
+                    <label>Número n</label>
+                    <input type="number" id="primality-n" value="1009" min="2">
+                    <button class="btn" onclick="runPrimality()">Probar</button>
+                </div>
+                <div class="demo-result" id="primality-result">Introduce un número y pulsa Probar.</div>
+                <p class="demo-note">Usa prueba determinista por división + Miller-Rabin simplificado para n grandes.</p>
+            </div>
+
+            <!-- Criba -->
+            <div class="demo-panel" id="panel-sieve">
+                <div class="demo-row">
+                    <label>Límite</label>
+                    <input type="number" id="sieve-limit" value="200" min="2" max="100000">
+                    <button class="btn" onclick="runSieve()">Generar</button>
+                </div>
+                <div class="demo-result" id="sieve-result">Elige un límite (máx. recomendado ~50 000).</div>
+            </div>
+
+            <!-- Goldbach -->
+            <div class="demo-panel" id="panel-goldbach">
+                <div class="demo-row">
+                    <label>Par n ≥ 4</label>
+                    <input type="number" id="goldbach-n" value="100" min="4" step="2">
+                    <button class="btn" onclick="runGoldbach()">Verificar</button>
+                </div>
+                <div class="demo-result" id="goldbach-result">Introduce un número par ≥ 4.</div>
+            </div>
+
+            <!-- Primos gemelos -->
+            <div class="demo-panel" id="panel-twins">
+                <div class="demo-row">
+                    <label>Límite</label>
+                    <input type="number" id="twins-limit" value="300" min="5" max="50000">
+                    <button class="btn" onclick="runTwins()">Buscar</button>
+                </div>
+                <div class="demo-result" id="twins-result">Busca pares (p, p+2) hasta el límite.</div>
+            </div>
+
+            <!-- Zeta -->
+            <div class="demo-panel" id="panel-zeta">
+                <div class="demo-row">
+                    <label>s (real > 1)</label>
+                    <input type="number" id="zeta-s" value="2" min="1.01" step="0.1">
+                    <button class="btn" onclick="runZeta()">Calcular ζ(s)</button>
+                </div>
+                <div class="demo-result" id="zeta-result">Aproximación por serie de Dirichlet (s > 1).</div>
+                <p class="demo-note">ζ(2) ≈ π²/6 ≈ 1.64493 · · · &nbsp;|&nbsp; ζ(4) ≈ π⁴/90 ≈ 1.0823</p>
+            </div>
+        </section>
+
         <!-- Bienvenida -->
         <section class="section">
             <h2>Bienvenido al Proyecto</h2>
             <p>
-                Proyecto de exploración computacional de números primos y de la 
-                <strong>Conjetura de Riemann</strong>, uno de los siete problemas del Milenio 
+                Proyecto de exploración computacional de números primos y de la
+                <strong>Conjetura de Riemann</strong>, uno de los siete problemas del Milenio
                 del Clay Mathematics Institute.
             </p>
-            <p style="margin-top: 0.9rem; color: #555;">
-                Incluye implementaciones de algoritmos clásicos y modernos para primalidad, 
-                generación de primos, análisis de distribución, verificación de conjeturas 
+            <p style="margin-top: 0.8rem; color: #555;">
+                Incluye implementaciones de algoritmos clásicos y modernos para primalidad,
+                generación de primos, análisis de distribución, verificación de conjeturas
                 y cálculo numérico de la función zeta de Riemann.
             </p>
             <div class="grid">
-                <div class="card">
-                    <h3>🔍 Pruebas de Primalidad</h3>
-                    <p>Miller-Rabin, AKS, Fermat, Solovay-Strassen, Lucas-Lehmer</p>
-                </div>
-                <div class="card">
-                    <h3>📊 Generación de Primos</h3>
-                    <p>Criba de Eratóstenes, Atkin, Segmented Sieve</p>
-                </div>
-                <div class="card">
-                    <h3>📈 Análisis de Distribución</h3>
-                    <p>π(n), Teorema del Número Primo, Ley de Benford</p>
-                </div>
-                <div class="card">
-                    <h3>🧮 Conjeturas</h3>
-                    <p>Goldbach, Primos Gemelos, Bertrand, Legendre</p>
-                </div>
-                <div class="card">
-                    <h3>ζ Función Zeta</h3>
-                    <p>Cálculo numérico, ceros en la línea crítica, verificación RH</p>
-                </div>
-                <div class="card">
-                    <h3>📉 Visualizaciones</h3>
-                    <p>Gráficos de distribución, gaps, Goldbach y más</p>
-                </div>
+                <div class="card"><h3>🔍 Pruebas de Primalidad</h3><p>Miller-Rabin, AKS, Fermat, Solovay-Strassen, Lucas-Lehmer</p></div>
+                <div class="card"><h3>📊 Generación de Primos</h3><p>Criba de Eratóstenes, Atkin, Segmented Sieve</p></div>
+                <div class="card"><h3>📈 Análisis de Distribución</h3><p>π(n), Teorema del Número Primo, Ley de Benford</p></div>
+                <div class="card"><h3>🧮 Conjeturas</h3><p>Goldbach, Primos Gemelos, Bertrand, Legendre</p></div>
+                <div class="card"><h3>ζ Función Zeta</h3><p>Cálculo numérico, ceros en la línea crítica, verificación RH</p></div>
+                <div class="card"><h3>📉 Visualizaciones</h3><p>Gráficos de distribución, gaps, Goldbach y más</p></div>
             </div>
         </section>
-        
+
         <!-- Características -->
         <section class="section">
             <h2>Características Principales</h2>
@@ -282,7 +321,6 @@
                         <li><strong>visualization.py</strong></li>
                     </ul>
                 </div>
-                
                 <div class="feature">
                     <h3>🚀 Algoritmos</h3>
                     <ul>
@@ -294,7 +332,6 @@
                         <li>Ecuación funcional de Riemann</li>
                     </ul>
                 </div>
-                
                 <div class="feature">
                     <h3>📚 Conjeturas</h3>
                     <ul>
@@ -308,66 +345,38 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- Cómo usar -->
         <section class="section">
-            <h2>🚀 Cómo usar</h2>
-            
-            <h3 style="margin-top: 0.6rem; color: #1e3c72; font-size: 1.1rem;">Instalación</h3>
+            <h2>🚀 Cómo usar (Python)</h2>
+            <h3 style="margin-top: 0.5rem; color: #1e3c72; font-size: 1.05rem;">Instalación</h3>
             <div class="code-block">git clone https://github.com/octacorrr/millennium-prime-numbers.git
 cd millennium-prime-numbers
 pip install -r requirements.txt</div>
-            
-            <h3 style="color: #1e3c72; font-size: 1.1rem;">Programa interactivo</h3>
+            <h3 style="color: #1e3c72; font-size: 1.05rem;">Programa interactivo</h3>
             <div class="code-block">python main.py</div>
-            
-            <h3 style="color: #1e3c72; font-size: 1.1rem;">Función Zeta de Riemann</h3>
+            <h3 style="color: #1e3c72; font-size: 1.05rem;">Función Zeta de Riemann</h3>
             <div class="code-block">from src.riemann_zeta import RiemannZeta
-
-# ζ(2) ≈ π²/6
 print(RiemannZeta.zeta(2))
-
-# Buscar ceros en la línea crítica
 zeros = RiemannZeta.find_zeros_on_critical_line(0.1, 40, 0.15)
 print(zeros[:5])</div>
-            
-            <h3 style="color: #1e3c72; font-size: 1.1rem;">Como librería</h3>
-            <div class="code-block">from src.prime_generation import PrimeGenerator
-from src.primality_tests import PrimalityTester
-
-primes = PrimeGenerator.sieve_of_eratosthenes(1000)
-is_prime = PrimalityTester.miller_rabin(1009)</div>
         </section>
-        
+
         <!-- Stats -->
         <section class="section">
             <h2>📊 Estadísticas</h2>
             <div class="stats">
-                <div class="stat-box">
-                    <div class="number">6</div>
-                    <div class="label">Módulos</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">30+</div>
-                    <div class="label">Funciones</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">5+</div>
-                    <div class="label">Conjeturas</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">∞</div>
-                    <div class="label">Límite ajustable</div>
-                </div>
+                <div class="stat-box"><div class="number">6</div><div class="label">Módulos</div></div>
+                <div class="stat-box"><div class="number">30+</div><div class="label">Funciones</div></div>
+                <div class="stat-box"><div class="number">5+</div><div class="label">Conjeturas</div></div>
+                <div class="stat-box"><div class="number">∞</div><div class="label">Límite ajustable</div></div>
             </div>
         </section>
-        
+
         <!-- Código -->
         <section class="section">
             <h2>💻 Código fuente</h2>
-            <p>
-                Todo el código está en GitHub. Puedes clonar, explorar, abrir issues o hacer fork.
-            </p>
+            <p>Todo el código está en GitHub. Puedes clonar, explorar, abrir issues o hacer fork.</p>
             <div class="button-group">
                 <a href="https://github.com/octacorrr/millennium-prime-numbers" class="github-link" target="_blank" rel="noopener">🔗 Ver repositorio</a>
                 <a href="https://github.com/octacorrr/millennium-prime-numbers/blob/main/src/riemann_zeta.py" class="github-link" target="_blank" rel="noopener">ζ riemann_zeta.py</a>
@@ -375,16 +384,197 @@ is_prime = PrimalityTester.miller_rabin(1009)</div>
             </div>
         </section>
     </div>
-    
+
     <footer>
         <h3>Millennium Prime Numbers</h3>
         <p>Exploración Computacional de la Conjetura de Riemann</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+        <p style="margin-top: 0.9rem; font-size: 0.9rem; opacity: 0.85;">
             © 2026 <a href="https://github.com/octacorrr" target="_blank" rel="noopener">octacorrr</a>
         </p>
-        <p style="margin-top: 0.6rem; font-size: 0.85rem; opacity: 0.7; font-style: italic;">
+        <p style="margin-top: 0.5rem; font-size: 0.84rem; opacity: 0.7; font-style: italic;">
             "In mathematics, you don't understand things. You just get used to them." — John von Neumann
         </p>
     </footer>
+
+    <script>
+    // ========== Utilidades de primos ==========
+    function isPrime(n) {
+        n = Number(n);
+        if (!Number.isInteger(n) || n < 2) return false;
+        if (n === 2 || n === 3) return true;
+        if (n % 2 === 0 || n % 3 === 0) return false;
+        if (n < 1e6) {
+            for (let i = 5; i * i <= n; i += 6) {
+                if (n % i === 0 || n % (i + 2) === 0) return false;
+            }
+            return true;
+        }
+        // Miller-Rabin simplificado para n grandes
+        return millerRabin(n, 8);
+    }
+
+    function modPow(base, exp, mod) {
+        let result = 1n;
+        base = BigInt(base) % BigInt(mod);
+        exp = BigInt(exp);
+        mod = BigInt(mod);
+        while (exp > 0n) {
+            if (exp & 1n) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp >>= 1n;
+        }
+        return result;
+    }
+
+    function millerRabin(n, k) {
+        n = BigInt(n);
+        if (n < 2n) return false;
+        if (n === 2n || n === 3n) return true;
+        if (n % 2n === 0n) return false;
+        let d = n - 1n, r = 0n;
+        while (d % 2n === 0n) { d /= 2n; r++; }
+        const bases = [2n, 3n, 5n, 7n, 11n, 13n, 23n, 29n];
+        for (let i = 0; i < Math.min(k, bases.length); i++) {
+            let a = bases[i] % n;
+            if (a === 0n) continue;
+            let x = modPow(a, d, n);
+            if (x === 1n || x === n - 1n) continue;
+            let cont = false;
+            for (let j = 1n; j < r; j++) {
+                x = (x * x) % n;
+                if (x === n - 1n) { cont = true; break; }
+            }
+            if (!cont) return false;
+        }
+        return true;
+    }
+
+    function sieve(limit) {
+        limit = Math.min(Math.floor(limit), 100000);
+        if (limit < 2) return [];
+        const isP = new Array(limit + 1).fill(true);
+        isP[0] = isP[1] = false;
+        for (let i = 2; i * i <= limit; i++) {
+            if (isP[i]) {
+                for (let j = i * i; j <= limit; j += i) isP[j] = false;
+            }
+        }
+        const primes = [];
+        for (let i = 2; i <= limit; i++) if (isP[i]) primes.push(i);
+        return primes;
+    }
+
+    // ========== Tabs ==========
+    document.querySelectorAll('.demo-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ========== Acciones ==========
+    function runPrimality() {
+        const el = document.getElementById('primality-result');
+        const n = Number(document.getElementById('primality-n').value);
+        if (!Number.isFinite(n) || n < 2) {
+            el.className = 'demo-result error';
+            el.textContent = 'Introduce un entero ≥ 2.';
+            return;
+        }
+        const start = performance.now();
+        const prime = isPrime(n);
+        const ms = (performance.now() - start).toFixed(2);
+        el.className = 'demo-result';
+        el.textContent = n + (prime ? ' es PRIMO' : ' es COMPUESTO') + '\nTiempo: ' + ms + ' ms';
+    }
+
+    function runSieve() {
+        const el = document.getElementById('sieve-result');
+        let limit = Number(document.getElementById('sieve-limit').value);
+        if (!Number.isFinite(limit) || limit < 2) {
+            el.className = 'demo-result error';
+            el.textContent = 'Límite inválido.';
+            return;
+        }
+        if (limit > 100000) limit = 100000;
+        const start = performance.now();
+        const primes = sieve(limit);
+        const ms = (performance.now() - start).toFixed(2);
+        el.className = 'demo-result';
+        el.innerHTML = 'π(' + limit + ') = <strong>' + primes.length + '</strong> primos\n' +
+            'Tiempo: ' + ms + ' ms\n' +
+            '<div class="prime-list">' + primes.join(', ') + '</div>';
+    }
+
+    function runGoldbach() {
+        const el = document.getElementById('goldbach-result');
+        let n = Number(document.getElementById('goldbach-n').value);
+        if (!Number.isFinite(n) || n < 4 || n % 2 !== 0) {
+            el.className = 'demo-result error';
+            el.textContent = 'Introduce un número par ≥ 4.';
+            return;
+        }
+        if (n > 200000) n = 200000;
+        const primes = sieve(n);
+        const set = new Set(primes);
+        const pairs = [];
+        for (const p of primes) {
+            if (p > n / 2) break;
+            if (set.has(n - p)) pairs.push(p + ' + ' + (n - p));
+        }
+        el.className = 'demo-result';
+        if (pairs.length === 0) {
+            el.textContent = n + ' no se pudo descomponer (raro).';
+        } else {
+            el.innerHTML = n + ' = suma de dos primos\n' +
+                'Representaciones: ' + pairs.length + '\n' +
+                '<div class="prime-list">' + pairs.slice(0, 30).join('\n') +
+                (pairs.length > 30 ? '\n… y ' + (pairs.length - 30) + ' más' : '') + '</div>';
+        }
+    }
+
+    function runTwins() {
+        const el = document.getElementById('twins-result');
+        let limit = Number(document.getElementById('twins-limit').value);
+        if (!Number.isFinite(limit) || limit < 5) {
+            el.className = 'demo-result error';
+            el.textContent = 'Límite inválido.';
+            return;
+        }
+        if (limit > 50000) limit = 50000;
+        const primes = sieve(limit);
+        const twins = [];
+        for (let i = 0; i < primes.length - 1; i++) {
+            if (primes[i + 1] - primes[i] === 2) twins.push('(' + primes[i] + ', ' + primes[i + 1] + ')');
+        }
+        el.className = 'demo-result';
+        el.innerHTML = 'Pares de primos gemelos hasta ' + limit + ': <strong>' + twins.length + '</strong>\n' +
+            '<div class="prime-list">' + twins.join(', ') + '</div>';
+    }
+
+    function runZeta() {
+        const el = document.getElementById('zeta-result');
+        let s = Number(document.getElementById('zeta-s').value);
+        if (!Number.isFinite(s) || s <= 1) {
+            el.className = 'demo-result error';
+            el.textContent = 's debe ser real > 1 (serie de Dirichlet).';
+            return;
+        }
+        const terms = s < 1.5 ? 200000 : (s < 3 ? 50000 : 10000);
+        let sum = 0;
+        for (let n = 1; n <= terms; n++) sum += Math.pow(n, -s);
+        const known = { 2: Math.PI * Math.PI / 6, 4: Math.pow(Math.PI, 4) / 90 };
+        let extra = '';
+        if (known[s]) {
+            extra = '\nValor exacto conocido: ' + known[s].toFixed(10) +
+                '\nError aprox.: ' + Math.abs(sum - known[s]).toExponential(3);
+        }
+        el.className = 'demo-result';
+        el.textContent = 'ζ(' + s + ') ≈ ' + sum.toFixed(10) +
+            '\nTérminos usados: ' + terms + extra;
+    }
+    </script>
 </body>
 </html>
