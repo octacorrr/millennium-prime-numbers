@@ -70,6 +70,12 @@
         .btn:hover, .github-link:hover { background: #3d8b40; }
         .github-link { background: #333; }
         .github-link:hover { background: #555; }
+        .btn-collatz {
+            background: linear-gradient(135deg, #203a43, #2c5364);
+            color: #7fdbda;
+            border: 1px solid #7fdbda;
+        }
+        .btn-collatz:hover { background: #2c5364; }
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -130,8 +136,6 @@
             font-weight: 600;
             margin-left: 0.35rem;
         }
-
-        /* Demo interactivo */
         .demo-tabs {
             display: flex;
             flex-wrap: wrap;
@@ -150,10 +154,7 @@
             color: #333;
             transition: background 0.2s;
         }
-        .demo-tab.active {
-            background: #1e3c72;
-            color: white;
-        }
+        .demo-tab.active { background: #1e3c72; color: white; }
         .demo-panel { display: none; }
         .demo-panel.active { display: block; }
         .demo-row {
@@ -184,11 +185,7 @@
             min-height: 2.5rem;
         }
         .demo-result.error { background: #fdf0f0; border-left-color: #e53935; }
-        .demo-note {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.6rem;
-        }
+        .demo-note { font-size: 0.85rem; color: #666; margin-top: 0.6rem; }
         .prime-list {
             max-height: 180px;
             overflow-y: auto;
@@ -198,7 +195,6 @@
             margin-top: 0.5rem;
             font-size: 0.88rem;
         }
-
         @media (max-width: 600px) {
             header h1 { font-size: 1.65rem; }
             .section { padding: 1.3rem; }
@@ -214,12 +210,21 @@
 
     <div class="container">
 
-        <!-- DEMO INTERACTIVO -->
+        <section class="section" style="border: 2px solid #2c5364; background: linear-gradient(135deg, #f7fafc, #eef5f8);">
+            <h2>🔄 Conjetura de Collatz</h2>
+            <p style="color:#444; margin-bottom: 1rem;">
+                Explorador interactivo de la conjetura 3n+1: secuencias, rangos, histogramas y récords históricos.
+            </p>
+            <div class="button-group">
+                <a href="collatz.html" class="btn btn-collatz">Abrir explorador Collatz →</a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers/blob/main/collatz.py" class="github-link" target="_blank" rel="noopener">collatz.py (CLI)</a>
+            </div>
+        </section>
+
         <section class="section" id="demo">
-            <h2>🧪 Probar en el navegador</h2>
+            <h2>🧪 Probar en el navegador (primos)</h2>
             <p style="margin-bottom: 1rem; color: #555;">
-                Prueba rápida de los algoritmos principales (implementación JavaScript en el cliente).
-                Para cálculos intensivos usa el código Python del repositorio.
+                Prueba rápida de los algoritmos principales (JavaScript en el cliente).
             </p>
 
             <div class="demo-tabs">
@@ -230,7 +235,6 @@
                 <button class="demo-tab" data-tab="zeta">ζ(s) aproximado</button>
             </div>
 
-            <!-- Primalidad -->
             <div class="demo-panel active" id="panel-primality">
                 <div class="demo-row">
                     <label>Número n</label>
@@ -238,20 +242,17 @@
                     <button class="btn" onclick="runPrimality()">Probar</button>
                 </div>
                 <div class="demo-result" id="primality-result">Introduce un número y pulsa Probar.</div>
-                <p class="demo-note">Usa prueba determinista por división + Miller-Rabin simplificado para n grandes.</p>
             </div>
 
-            <!-- Criba -->
             <div class="demo-panel" id="panel-sieve">
                 <div class="demo-row">
                     <label>Límite</label>
                     <input type="number" id="sieve-limit" value="200" min="2" max="100000">
                     <button class="btn" onclick="runSieve()">Generar</button>
                 </div>
-                <div class="demo-result" id="sieve-result">Elige un límite (máx. recomendado ~50 000).</div>
+                <div class="demo-result" id="sieve-result">Elige un límite.</div>
             </div>
 
-            <!-- Goldbach -->
             <div class="demo-panel" id="panel-goldbach">
                 <div class="demo-row">
                     <label>Par n ≥ 4</label>
@@ -261,171 +262,86 @@
                 <div class="demo-result" id="goldbach-result">Introduce un número par ≥ 4.</div>
             </div>
 
-            <!-- Primos gemelos -->
             <div class="demo-panel" id="panel-twins">
                 <div class="demo-row">
                     <label>Límite</label>
                     <input type="number" id="twins-limit" value="300" min="5" max="50000">
                     <button class="btn" onclick="runTwins()">Buscar</button>
                 </div>
-                <div class="demo-result" id="twins-result">Busca pares (p, p+2) hasta el límite.</div>
+                <div class="demo-result" id="twins-result">Busca pares (p, p+2).</div>
             </div>
 
-            <!-- Zeta -->
             <div class="demo-panel" id="panel-zeta">
                 <div class="demo-row">
                     <label>s (real > 1)</label>
                     <input type="number" id="zeta-s" value="2" min="1.01" step="0.1">
                     <button class="btn" onclick="runZeta()">Calcular ζ(s)</button>
                 </div>
-                <div class="demo-result" id="zeta-result">Aproximación por serie de Dirichlet (s > 1).</div>
-                <p class="demo-note">ζ(2) ≈ π²/6 ≈ 1.64493 · · · &nbsp;|&nbsp; ζ(4) ≈ π⁴/90 ≈ 1.0823</p>
+                <div class="demo-result" id="zeta-result">Aproximación por serie de Dirichlet.</div>
             </div>
         </section>
 
-        <!-- Bienvenida -->
         <section class="section">
             <h2>Bienvenido al Proyecto</h2>
             <p>
                 Proyecto de exploración computacional de números primos y de la
-                <strong>Conjetura de Riemann</strong>, uno de los siete problemas del Milenio
-                del Clay Mathematics Institute.
+                <strong>Conjetura de Riemann</strong>.
             </p>
-            <p style="margin-top: 0.8rem; color: #555;">
-                Incluye implementaciones de algoritmos clásicos y modernos para primalidad,
-                generación de primos, análisis de distribución, verificación de conjeturas
-                y cálculo numérico de la función zeta de Riemann.
-            </p>
-            <div class="grid">
-                <div class="card"><h3>🔍 Pruebas de Primalidad</h3><p>Miller-Rabin, AKS, Fermat, Solovay-Strassen, Lucas-Lehmer</p></div>
-                <div class="card"><h3>📊 Generación de Primos</h3><p>Criba de Eratóstenes, Atkin, Segmented Sieve</p></div>
-                <div class="card"><h3>📈 Análisis de Distribución</h3><p>π(n), Teorema del Número Primo, Ley de Benford</p></div>
-                <div class="card"><h3>🧮 Conjeturas</h3><p>Goldbach, Primos Gemelos, Bertrand, Legendre</p></div>
-                <div class="card"><h3>ζ Función Zeta</h3><p>Cálculo numérico, ceros en la línea crítica, verificación RH</p></div>
-                <div class="card"><h3>📉 Visualizaciones</h3><p>Gráficos de distribución, gaps, Goldbach y más</p></div>
+            <div class="grid" style="margin-top:1rem">
+                <div class="card"><h3>🔍 Pruebas de Primalidad</h3><p>Miller-Rabin, AKS, Fermat, Solovay-Strassen</p></div>
+                <div class="card"><h3>📊 Generación de Primos</h3><p>Criba de Eratóstenes, Atkin</p></div>
+                <div class="card"><h3>ζ Función Zeta</h3><p>Ceros en la línea crítica, verificación RH</p></div>
+                <div class="card"><h3>🔄 Collatz</h3><p>Secuencias 3n+1, rangos y récords</p></div>
             </div>
         </section>
 
-        <!-- Características -->
-        <section class="section">
-            <h2>Características Principales</h2>
-            <div class="features">
-                <div class="feature">
-                    <h3>🎯 Módulos</h3>
-                    <ul>
-                        <li><strong>primality_tests.py</strong></li>
-                        <li><strong>prime_generation.py</strong></li>
-                        <li><strong>distribution_analysis.py</strong></li>
-                        <li><strong>conjectures.py</strong></li>
-                        <li><strong>riemann_zeta.py</strong> <span class="badge">nuevo</span></li>
-                        <li><strong>visualization.py</strong></li>
-                    </ul>
-                </div>
-                <div class="feature">
-                    <h3>🚀 Algoritmos</h3>
-                    <ul>
-                        <li>Miller-Rabin · O(k log³ n)</li>
-                        <li>Criba de Eratóstenes · O(n log log n)</li>
-                        <li>Criba de Atkin</li>
-                        <li>AKS (determinístico)</li>
-                        <li>Lucas-Lehmer (Mersenne)</li>
-                        <li>Ecuación funcional de Riemann</li>
-                    </ul>
-                </div>
-                <div class="feature">
-                    <h3>📚 Conjeturas</h3>
-                    <ul>
-                        <li>Goldbach</li>
-                        <li>Primos Gemelos</li>
-                        <li>Postulado de Bertrand</li>
-                        <li>Conjetura de Legendre</li>
-                        <li>Conjetura de Cramér</li>
-                        <li>Hipótesis de Riemann (parcial)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Cómo usar -->
         <section class="section">
             <h2>🚀 Cómo usar (Python)</h2>
-            <h3 style="margin-top: 0.5rem; color: #1e3c72; font-size: 1.05rem;">Instalación</h3>
             <div class="code-block">git clone https://github.com/octacorrr/millennium-prime-numbers.git
 cd millennium-prime-numbers
-pip install -r requirements.txt</div>
-            <h3 style="color: #1e3c72; font-size: 1.05rem;">Programa interactivo</h3>
-            <div class="code-block">python main.py</div>
-            <h3 style="color: #1e3c72; font-size: 1.05rem;">Función Zeta de Riemann</h3>
-            <div class="code-block">from src.riemann_zeta import RiemannZeta
-print(RiemannZeta.zeta(2))
-zeros = RiemannZeta.find_zeros_on_critical_line(0.1, 40, 0.15)
-print(zeros[:5])</div>
+pip install -r requirements.txt
+python main.py          # menú de primos / Riemann
+python collatz.py       # explorador Collatz</div>
         </section>
 
-        <!-- Stats -->
-        <section class="section">
-            <h2>📊 Estadísticas</h2>
-            <div class="stats">
-                <div class="stat-box"><div class="number">6</div><div class="label">Módulos</div></div>
-                <div class="stat-box"><div class="number">30+</div><div class="label">Funciones</div></div>
-                <div class="stat-box"><div class="number">5+</div><div class="label">Conjeturas</div></div>
-                <div class="stat-box"><div class="number">∞</div><div class="label">Límite ajustable</div></div>
-            </div>
-        </section>
-
-        <!-- Código -->
         <section class="section">
             <h2>💻 Código fuente</h2>
-            <p>Todo el código está en GitHub. Puedes clonar, explorar, abrir issues o hacer fork.</p>
             <div class="button-group">
-                <a href="https://github.com/octacorrr/millennium-prime-numbers" class="github-link" target="_blank" rel="noopener">🔗 Ver repositorio</a>
-                <a href="https://github.com/octacorrr/millennium-prime-numbers/blob/main/src/riemann_zeta.py" class="github-link" target="_blank" rel="noopener">ζ riemann_zeta.py</a>
-                <a href="https://github.com/octacorrr/millennium-prime-numbers/issues" class="github-link" target="_blank" rel="noopener">📝 Issues</a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers" class="github-link" target="_blank" rel="noopener">🔗 Repositorio</a>
+                <a href="collatz.html" class="btn btn-collatz">Collatz web</a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers/blob/main/src/riemann_zeta.py" class="github-link" target="_blank" rel="noopener">riemann_zeta.py</a>
             </div>
         </section>
     </div>
 
     <footer>
         <h3>Millennium Prime Numbers</h3>
-        <p>Exploración Computacional de la Conjetura de Riemann</p>
-        <p style="margin-top: 0.9rem; font-size: 0.9rem; opacity: 0.85;">
-            © 2026 <a href="https://github.com/octacorrr" target="_blank" rel="noopener">octacorrr</a>
-        </p>
-        <p style="margin-top: 0.5rem; font-size: 0.84rem; opacity: 0.7; font-style: italic;">
-            "In mathematics, you don't understand things. You just get used to them." — John von Neumann
-        </p>
+        <p>© 2026 <a href="https://github.com/octacorrr" target="_blank" rel="noopener">octacorrr</a></p>
     </footer>
 
     <script>
-    // ========== Utilidades de primos ==========
     function isPrime(n) {
         n = Number(n);
         if (!Number.isInteger(n) || n < 2) return false;
         if (n === 2 || n === 3) return true;
         if (n % 2 === 0 || n % 3 === 0) return false;
         if (n < 1e6) {
-            for (let i = 5; i * i <= n; i += 6) {
+            for (let i = 5; i * i <= n; i += 6)
                 if (n % i === 0 || n % (i + 2) === 0) return false;
-            }
             return true;
         }
-        // Miller-Rabin simplificado para n grandes
         return millerRabin(n, 8);
     }
-
     function modPow(base, exp, mod) {
         let result = 1n;
         base = BigInt(base) % BigInt(mod);
-        exp = BigInt(exp);
-        mod = BigInt(mod);
+        exp = BigInt(exp); mod = BigInt(mod);
         while (exp > 0n) {
             if (exp & 1n) result = (result * base) % mod;
-            base = (base * base) % mod;
-            exp >>= 1n;
+            base = (base * base) % mod; exp >>= 1n;
         }
         return result;
     }
-
     function millerRabin(n, k) {
         n = BigInt(n);
         if (n < 2n) return false;
@@ -448,23 +364,17 @@ print(zeros[:5])</div>
         }
         return true;
     }
-
     function sieve(limit) {
         limit = Math.min(Math.floor(limit), 100000);
         if (limit < 2) return [];
         const isP = new Array(limit + 1).fill(true);
         isP[0] = isP[1] = false;
-        for (let i = 2; i * i <= limit; i++) {
-            if (isP[i]) {
-                for (let j = i * i; j <= limit; j += i) isP[j] = false;
-            }
-        }
+        for (let i = 2; i * i <= limit; i++)
+            if (isP[i]) for (let j = i * i; j <= limit; j += i) isP[j] = false;
         const primes = [];
         for (let i = 2; i <= limit; i++) if (isP[i]) primes.push(i);
         return primes;
     }
-
-    // ========== Tabs ==========
     document.querySelectorAll('.demo-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
@@ -473,49 +383,29 @@ print(zeros[:5])</div>
             document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
         });
     });
-
-    // ========== Acciones ==========
     function runPrimality() {
         const el = document.getElementById('primality-result');
         const n = Number(document.getElementById('primality-n').value);
-        if (!Number.isFinite(n) || n < 2) {
-            el.className = 'demo-result error';
-            el.textContent = 'Introduce un entero ≥ 2.';
-            return;
-        }
-        const start = performance.now();
+        if (!Number.isFinite(n) || n < 2) { el.className = 'demo-result error'; el.textContent = 'Entero ≥ 2.'; return; }
+        const t0 = performance.now();
         const prime = isPrime(n);
-        const ms = (performance.now() - start).toFixed(2);
         el.className = 'demo-result';
-        el.textContent = n + (prime ? ' es PRIMO' : ' es COMPUESTO') + '\nTiempo: ' + ms + ' ms';
+        el.textContent = n + (prime ? ' es PRIMO' : ' es COMPUESTO') + '\nTiempo: ' + (performance.now()-t0).toFixed(2) + ' ms';
     }
-
     function runSieve() {
         const el = document.getElementById('sieve-result');
         let limit = Number(document.getElementById('sieve-limit').value);
-        if (!Number.isFinite(limit) || limit < 2) {
-            el.className = 'demo-result error';
-            el.textContent = 'Límite inválido.';
-            return;
-        }
+        if (!Number.isFinite(limit) || limit < 2) { el.className = 'demo-result error'; el.textContent = 'Límite inválido.'; return; }
         if (limit > 100000) limit = 100000;
-        const start = performance.now();
+        const t0 = performance.now();
         const primes = sieve(limit);
-        const ms = (performance.now() - start).toFixed(2);
         el.className = 'demo-result';
-        el.innerHTML = 'π(' + limit + ') = <strong>' + primes.length + '</strong> primos\n' +
-            'Tiempo: ' + ms + ' ms\n' +
-            '<div class="prime-list">' + primes.join(', ') + '</div>';
+        el.innerHTML = 'π(' + limit + ') = <strong>' + primes.length + '</strong>\nTiempo: ' + (performance.now()-t0).toFixed(2) + ' ms\n<div class="prime-list">' + primes.join(', ') + '</div>';
     }
-
     function runGoldbach() {
         const el = document.getElementById('goldbach-result');
         let n = Number(document.getElementById('goldbach-n').value);
-        if (!Number.isFinite(n) || n < 4 || n % 2 !== 0) {
-            el.className = 'demo-result error';
-            el.textContent = 'Introduce un número par ≥ 4.';
-            return;
-        }
+        if (!Number.isFinite(n) || n < 4 || n % 2 !== 0) { el.className = 'demo-result error'; el.textContent = 'Par ≥ 4.'; return; }
         if (n > 200000) n = 200000;
         const primes = sieve(n);
         const set = new Set(primes);
@@ -525,55 +415,32 @@ print(zeros[:5])</div>
             if (set.has(n - p)) pairs.push(p + ' + ' + (n - p));
         }
         el.className = 'demo-result';
-        if (pairs.length === 0) {
-            el.textContent = n + ' no se pudo descomponer (raro).';
-        } else {
-            el.innerHTML = n + ' = suma de dos primos\n' +
-                'Representaciones: ' + pairs.length + '\n' +
-                '<div class="prime-list">' + pairs.slice(0, 30).join('\n') +
-                (pairs.length > 30 ? '\n… y ' + (pairs.length - 30) + ' más' : '') + '</div>';
-        }
+        el.innerHTML = n + ' = suma de dos primos\nRepresentaciones: ' + pairs.length +
+            '<div class="prime-list">' + pairs.slice(0, 25).join('\n') + (pairs.length > 25 ? '\n…' : '') + '</div>';
     }
-
     function runTwins() {
         const el = document.getElementById('twins-result');
         let limit = Number(document.getElementById('twins-limit').value);
-        if (!Number.isFinite(limit) || limit < 5) {
-            el.className = 'demo-result error';
-            el.textContent = 'Límite inválido.';
-            return;
-        }
+        if (!Number.isFinite(limit) || limit < 5) { el.className = 'demo-result error'; el.textContent = 'Límite inválido.'; return; }
         if (limit > 50000) limit = 50000;
         const primes = sieve(limit);
         const twins = [];
-        for (let i = 0; i < primes.length - 1; i++) {
-            if (primes[i + 1] - primes[i] === 2) twins.push('(' + primes[i] + ', ' + primes[i + 1] + ')');
-        }
+        for (let i = 0; i < primes.length - 1; i++)
+            if (primes[i+1] - primes[i] === 2) twins.push('(' + primes[i] + ', ' + primes[i+1] + ')');
         el.className = 'demo-result';
-        el.innerHTML = 'Pares de primos gemelos hasta ' + limit + ': <strong>' + twins.length + '</strong>\n' +
-            '<div class="prime-list">' + twins.join(', ') + '</div>';
+        el.innerHTML = 'Gemelos hasta ' + limit + ': <strong>' + twins.length + '</strong>\n<div class="prime-list">' + twins.join(', ') + '</div>';
     }
-
     function runZeta() {
         const el = document.getElementById('zeta-result');
         let s = Number(document.getElementById('zeta-s').value);
-        if (!Number.isFinite(s) || s <= 1) {
-            el.className = 'demo-result error';
-            el.textContent = 's debe ser real > 1 (serie de Dirichlet).';
-            return;
-        }
+        if (!Number.isFinite(s) || s <= 1) { el.className = 'demo-result error'; el.textContent = 's > 1.'; return; }
         const terms = s < 1.5 ? 200000 : (s < 3 ? 50000 : 10000);
         let sum = 0;
         for (let n = 1; n <= terms; n++) sum += Math.pow(n, -s);
-        const known = { 2: Math.PI * Math.PI / 6, 4: Math.pow(Math.PI, 4) / 90 };
-        let extra = '';
-        if (known[s]) {
-            extra = '\nValor exacto conocido: ' + known[s].toFixed(10) +
-                '\nError aprox.: ' + Math.abs(sum - known[s]).toExponential(3);
-        }
+        const known = { 2: Math.PI*Math.PI/6, 4: Math.pow(Math.PI,4)/90 };
+        let extra = known[s] ? '\nExacto: ' + known[s].toFixed(10) + ' · error: ' + Math.abs(sum-known[s]).toExponential(2) : '';
         el.className = 'demo-result';
-        el.textContent = 'ζ(' + s + ') ≈ ' + sum.toFixed(10) +
-            '\nTérminos usados: ' + terms + extra;
+        el.textContent = 'ζ(' + s + ') ≈ ' + sum.toFixed(10) + '\nTérminos: ' + terms + extra;
     }
     </script>
 </body>
