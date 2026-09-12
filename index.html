@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Millennium Prime Numbers - Exploración de la Conjetura de Riemann</title>
+    <meta name="description" content="Exploración computacional de números primos y la Conjetura de Riemann. Algoritmos de primalidad, generación de primos, análisis de distribución y función zeta.">
     <style>
         * {
             margin: 0;
@@ -16,39 +17,40 @@
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: #333;
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         header {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             color: white;
-            padding: 2rem;
+            padding: 2.5rem 1.5rem;
             text-align: center;
             border-bottom: 3px solid #4CAF50;
         }
         
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         header p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             opacity: 0.9;
         }
         
-        container {
-            max-width: 1200px;
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
         }
         
         .section {
             background: white;
-            margin: 2rem 0;
+            margin: 1.8rem 0;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
         
         .section h2 {
@@ -56,157 +58,164 @@
             margin-bottom: 1rem;
             border-bottom: 2px solid #4CAF50;
             padding-bottom: 0.5rem;
+            font-size: 1.5rem;
         }
         
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.3rem;
+            margin-top: 1.2rem;
         }
         
         .card {
-            background: #f5f5f5;
-            padding: 1.5rem;
-            border-radius: 6px;
+            background: #f7f9fc;
+            padding: 1.4rem;
+            border-radius: 8px;
             border-left: 4px solid #4CAF50;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
         }
         
         .card h3 {
             color: #1e3c72;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
         }
         
         .card p {
-            font-size: 0.95rem;
-            color: #666;
+            font-size: 0.93rem;
+            color: #555;
         }
         
         .button-group {
             display: flex;
-            gap: 1rem;
+            gap: 0.9rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
+            margin-top: 1.4rem;
         }
         
-        .btn {
+        .btn, .github-link {
             display: inline-block;
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.4rem;
             background: #4CAF50;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
-            transition: background 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+            border-radius: 5px;
+            transition: background 0.25s ease;
+            font-size: 0.95rem;
         }
         
-        .btn:hover {
-            background: #45a049;
-        }
-        
-        .btn-secondary {
-            background: #2196F3;
-        }
-        
-        .btn-secondary:hover {
-            background: #0b7dda;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .stat-box {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .stat-box .number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-box .label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .feature {
-            padding: 1.5rem;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .feature h3 {
-            color: #4CAF50;
-            margin-bottom: 0.5rem;
-        }
-        
-        .feature ul {
-            margin-left: 1.5rem;
-            color: #666;
-        }
-        
-        .feature li {
-            margin-bottom: 0.5rem;
-        }
-        
-        footer {
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-top: 3px solid #4CAF50;
+        .btn:hover, .github-link:hover {
+            background: #3d8b40;
         }
         
         .github-link {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.8rem 1.5rem;
             background: #333;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background 0.3s ease;
         }
         
         .github-link:hover {
             background: #555;
         }
         
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.4rem;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
+            color: white;
+            padding: 1.4rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box .number {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-box .label {
+            font-size: 0.88rem;
+            opacity: 0.95;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.3rem;
+            margin-top: 1.3rem;
+        }
+        
+        .feature {
+            padding: 1.4rem;
+            background: #fafbfc;
+            border-radius: 8px;
+            border: 1px solid #e8ecef;
+        }
+        
+        .feature h3 {
+            color: #2e7d32;
+            margin-bottom: 0.6rem;
+        }
+        
+        .feature ul {
+            margin-left: 1.3rem;
+            color: #555;
+        }
+        
+        .feature li {
+            margin-bottom: 0.4rem;
+            font-size: 0.94rem;
+        }
+        
         .code-block {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 1rem;
-            border-radius: 4px;
+            background: #1e2a38;
+            color: #e8eef4;
+            padding: 1rem 1.2rem;
+            border-radius: 6px;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            margin: 1rem 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.88rem;
+            margin: 0.8rem 0 1.2rem;
+            line-height: 1.45;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.88);
+            color: white;
+            text-align: center;
+            padding: 2.2rem 1.5rem;
+            margin-top: 2rem;
+            border-top: 3px solid #4CAF50;
+        }
+        
+        footer a {
+            color: #81c784;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.4rem;
+        }
+        
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.7rem; }
+            .section { padding: 1.4rem; }
         }
     </style>
 </head>
@@ -216,191 +225,166 @@
         <p>Exploración Computacional de la Conjetura de Riemann</p>
     </header>
     
-    <container>
+    <div class="container">
         <!-- Bienvenida -->
         <section class="section">
             <h2>Bienvenido al Proyecto</h2>
             <p>
-                Este proyecto es una exploración computacional exhaustiva de números primos y de la famosa 
-                <strong>Conjetura de Riemann</strong>, uno de los problemas del Milenio más importantes en matemáticas.
+                Proyecto de exploración computacional de números primos y de la 
+                <strong>Conjetura de Riemann</strong>, uno de los siete problemas del Milenio 
+                del Clay Mathematics Institute.
             </p>
-            <p style="margin-top: 1rem; color: #666;">
-                El proyecto incluye implementaciones avanzadas de algoritmos para:
+            <p style="margin-top: 0.9rem; color: #555;">
+                Incluye implementaciones de algoritmos clásicos y modernos para primalidad, 
+                generación de primos, análisis de distribución, verificación de conjeturas 
+                y cálculo numérico de la función zeta de Riemann.
             </p>
             <div class="grid">
                 <div class="card">
                     <h3>🔍 Pruebas de Primalidad</h3>
-                    <p>Miller-Rabin, AKS, Fermat, Solovay-Strassen</p>
+                    <p>Miller-Rabin, AKS, Fermat, Solovay-Strassen, Lucas-Lehmer</p>
                 </div>
                 <div class="card">
                     <h3>📊 Generación de Primos</h3>
-                    <p>Criba de Eratóstenes, Segmented Sieve, Atkin</p>
+                    <p>Criba de Eratóstenes, Atkin, Segmented Sieve</p>
                 </div>
                 <div class="card">
                     <h3>📈 Análisis de Distribución</h3>
-                    <p>Teorema del Número Primo, Ley de Benford</p>
+                    <p>π(n), Teorema del Número Primo, Ley de Benford</p>
                 </div>
                 <div class="card">
-                    <h3>🧮 Conjeturas Matemáticas</h3>
-                    <p>Goldbach, Primos Gemelos, Bertrand</p>
+                    <h3>🧮 Conjeturas</h3>
+                    <p>Goldbach, Primos Gemelos, Bertrand, Legendre</p>
                 </div>
                 <div class="card">
-                    <h3>ζ Función Zeta de Riemann</h3>
-                    <p>Cálculo numérico y verificación de ceros</p>
+                    <h3>ζ Función Zeta</h3>
+                    <p>Cálculo numérico, ceros en la línea crítica, verificación RH</p>
                 </div>
                 <div class="card">
                     <h3>📉 Visualizaciones</h3>
-                    <p>Gráficos interactivos con matplotlib</p>
+                    <p>Gráficos de distribución, gaps, Goldbach y más</p>
                 </div>
             </div>
         </section>
         
-        <!-- Características Principales -->
+        <!-- Características -->
         <section class="section">
             <h2>Características Principales</h2>
             <div class="features">
                 <div class="feature">
-                    <h3>🎯 Módulos Especializados</h3>
+                    <h3>🎯 Módulos</h3>
                     <ul>
-                        <li><strong>primality_tests.py</strong> - Pruebas de primalidad avanzadas</li>
-                        <li><strong>prime_generation.py</strong> - Generación eficiente de primos</li>
-                        <li><strong>distribution_analysis.py</strong> - Análisis estadístico</li>
-                        <li><strong>conjectures.py</strong> - Verificación de conjeturas</li>
-                        <li><strong>riemann_zeta.py</strong> - Función Zeta de Riemann</li>
-                        <li><strong>visualization.py</strong> - Generación de gráficos</li>
+                        <li><strong>primality_tests.py</strong></li>
+                        <li><strong>prime_generation.py</strong></li>
+                        <li><strong>distribution_analysis.py</strong></li>
+                        <li><strong>conjectures.py</strong></li>
+                        <li><strong>riemann_zeta.py</strong> <span class="badge">nuevo</span></li>
+                        <li><strong>visualization.py</strong></li>
                     </ul>
                 </div>
                 
                 <div class="feature">
-                    <h3>🚀 Algoritmos Implementados</h3>
+                    <h3>🚀 Algoritmos</h3>
                     <ul>
-                        <li>Miller-Rabin (O(k log³ n))</li>
-                        <li>Criba de Eratóstenes (O(n log log n))</li>
-                        <li>Criba de Atkin (O(n / log log n))</li>
-                        <li>AKS (determinístico, O(n⁶))</li>
-                        <li>Lucas-Lehmer (primos de Mersenne)</li>
+                        <li>Miller-Rabin · O(k log³ n)</li>
+                        <li>Criba de Eratóstenes · O(n log log n)</li>
+                        <li>Criba de Atkin</li>
+                        <li>AKS (determinístico)</li>
+                        <li>Lucas-Lehmer (Mersenne)</li>
                         <li>Ecuación funcional de Riemann</li>
                     </ul>
                 </div>
                 
                 <div class="feature">
-                    <h3>📚 Conjeturas Verificadas</h3>
+                    <h3>📚 Conjeturas</h3>
                     <ul>
-                        <li>Conjetura de Goldbach</li>
-                        <li>Conjetura de los Primos Gemelos</li>
+                        <li>Goldbach</li>
+                        <li>Primos Gemelos</li>
                         <li>Postulado de Bertrand</li>
                         <li>Conjetura de Legendre</li>
                         <li>Conjetura de Cramér</li>
-                        <li>Conjetura de Riemann (parcialmente)</li>
+                        <li>Hipótesis de Riemann (parcial)</li>
                     </ul>
                 </div>
             </div>
         </section>
         
-        <!-- Como Usar -->
+        <!-- Cómo usar -->
         <section class="section">
-            <h2>🚀 Como Usar</h2>
+            <h2>🚀 Cómo usar</h2>
             
-            <h3 style="margin-top: 1rem; color: #1e3c72;">Instalación</h3>
-            <div class="code-block">
-git clone https://github.com/octacorrr/millennium-prime-numbers.git
+            <h3 style="margin-top: 0.6rem; color: #1e3c72; font-size: 1.1rem;">Instalación</h3>
+            <div class="code-block">git clone https://github.com/octacorrr/millennium-prime-numbers.git
 cd millennium-prime-numbers
-pip install -r requirements.txt
-            </div>
+pip install -r requirements.txt</div>
             
-            <h3 style="margin-top: 1rem; color: #1e3c72;">Ejecutar el Programa Principal</h3>
-            <div class="code-block">
-python main.py
-            </div>
+            <h3 style="color: #1e3c72; font-size: 1.1rem;">Programa interactivo</h3>
+            <div class="code-block">python main.py</div>
             
-            <h3 style="margin-top: 1rem; color: #1e3c72;">Generar Gráficos</h3>
-            <div class="code-block">
-python -c "from src.visualization import PrimeVisualizer; PrimeVisualizer.generate_all_charts(10000)"
-            </div>
+            <h3 style="color: #1e3c72; font-size: 1.1rem;">Función Zeta de Riemann</h3>
+            <div class="code-block">from src.riemann_zeta import RiemannZeta
+
+# ζ(2) ≈ π²/6
+print(RiemannZeta.zeta(2))
+
+# Buscar ceros en la línea crítica
+zeros = RiemannZeta.find_zeros_on_critical_line(0.1, 40, 0.15)
+print(zeros[:5])</div>
             
-            <h3 style="margin-top: 1rem; color: #1e3c72;">Usar como Librería</h3>
-            <div class="code-block">
-from src.prime_generation import PrimeGenerator
+            <h3 style="color: #1e3c72; font-size: 1.1rem;">Como librería</h3>
+            <div class="code-block">from src.prime_generation import PrimeGenerator
 from src.primality_tests import PrimalityTester
 
-# Generar primos
 primes = PrimeGenerator.sieve_of_eratosthenes(1000)
-
-# Probar primalidad
-is_prime = PrimalityTester.miller_rabin(1009)
-            </div>
+is_prime = PrimalityTester.miller_rabin(1009)</div>
         </section>
         
-        <!-- Estadísticas -->
+        <!-- Stats -->
         <section class="section">
-            <h2>📊 Estadísticas del Proyecto</h2>
+            <h2>📊 Estadísticas</h2>
             <div class="stats">
                 <div class="stat-box">
                     <div class="number">6</div>
-                    <div class="label">Módulos Principales</div>
+                    <div class="label">Módulos</div>
                 </div>
                 <div class="stat-box">
                     <div class="number">30+</div>
-                    <div class="label">Funciones Implementadas</div>
+                    <div class="label">Funciones</div>
                 </div>
                 <div class="stat-box">
-                    <div class="number">5</div>
-                    <div class="label">Conjeturas Verificadas</div>
+                    <div class="number">5+</div>
+                    <div class="label">Conjeturas</div>
                 </div>
                 <div class="stat-box">
                     <div class="number">∞</div>
-                    <div class="label">Límite Ajustable</div>
+                    <div class="label">Límite ajustable</div>
                 </div>
             </div>
         </section>
         
-        <!-- Documentación -->
+        <!-- Código -->
         <section class="section">
-            <h2>📖 Documentación</h2>
-            <p>Cada módulo contiene documentación completa en docstrings y comentarios explicativos.</p>
-            <p style="margin-top: 1rem;">
-                Para más información sobre las conjeturas y algoritmos, consulta:
-            </p>
-            <ul style="margin-left: 1.5rem; color: #666; margin-top: 1rem;">
-                <li><a href="https://es.wikipedia.org/wiki/Hip%C3%B3tesis_de_Riemann" target="_blank">Conjetura de Riemann - Wikipedia</a></li>
-                <li><a href="https://es.wikipedia.org/wiki/Conjetura_de_Goldbach" target="_blank">Conjetura de Goldbach - Wikipedia</a></li>
-                <li><a href="https://es.wikipedia.org/wiki/Criba_de_Erat%C3%B3stenes" target="_blank">Criba de Eratóstenes - Wikipedia</a></li>
-                <li><a href="https://es.wikipedia.org/wiki/Prueba_de_Miller-Rabin" target="_blank">Prueba de Miller-Rabin - Wikipedia</a></li>
-            </ul>
-        </section>
-        
-        <!-- Acceso al Código -->
-        <section class="section">
-            <h2>💻 Acceso al Código</h2>
+            <h2>💻 Código fuente</h2>
             <p>
-                El proyecto está completamente disponible en GitHub. 
-                Puedes acceder al repositorio, explorar el código fuente, clonar el proyecto 
-                y realizar contribuciones.
+                Todo el código está en GitHub. Puedes clonar, explorar, abrir issues o hacer fork.
             </p>
             <div class="button-group">
-                <a href="https://github.com/octacorrr/millennium-prime-numbers" class="github-link" target="_blank">
-                    🔗 Ver en GitHub
-                </a>
-                <a href="https://github.com/octacorrr/millennium-prime-numbers/issues" class="github-link" target="_blank">
-                    📝 Reportar un Problema
-                </a>
-                <a href="https://github.com/octacorrr/millennium-prime-numbers/fork" class="github-link" target="_blank">
-                    🍴 Hacer Fork
-                </a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers" class="github-link" target="_blank" rel="noopener">🔗 Ver repositorio</a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers/blob/main/src/riemann_zeta.py" class="github-link" target="_blank" rel="noopener">ζ riemann_zeta.py</a>
+                <a href="https://github.com/octacorrr/millennium-prime-numbers/issues" class="github-link" target="_blank" rel="noopener">📝 Issues</a>
             </div>
         </section>
-    </container>
+    </div>
     
     <footer>
         <h3>Millennium Prime Numbers</h3>
         <p>Exploración Computacional de la Conjetura de Riemann</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
-            © 2026 octacorrr | Todos los derechos reservados
+        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+            © 2026 <a href="https://github.com/octacorrr" target="_blank" rel="noopener">octacorrr</a>
         </p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.7;">
-            "In mathematics, you don't understand things. You just get used to them." - John von Neumann
+        <p style="margin-top: 0.6rem; font-size: 0.85rem; opacity: 0.7; font-style: italic;">
+            "In mathematics, you don't understand things. You just get used to them." — John von Neumann
         </p>
-        <a href="https://github.com/octacorrr" class="github-link">📍 Perfil de GitHub</a>
     </footer>
 </body>
 </html>
